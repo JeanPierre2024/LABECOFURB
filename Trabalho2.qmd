@@ -1,0 +1,121 @@
+---
+title: "A Dívida Pública Brasileira"
+author: "Jean Pierre"
+format: html
+editor: visual
+---
+
+## Introdução
+
+A **Dívida Pública Federal (DPF)** é o total de compromissos financeiros do governo federal com credores, em moeda nacional e estrangeira. Ela é usada para financiar o déficit orçamentário, rolar dívidas antigas e executar políticas públicas.
+
+A dívida pública é considerada um dos principais instrumentos de política fiscal e sua gestão é essencial para garantir a sustentabilidade das contas públicas e a confiança dos investidores.
+
+## Objetivo da Apresentação
+
+Apresentar uma visão geral da evolução da Dívida Pública Federal brasileira, com dados reais fornecidos pelo Banco Central do Brasil (série 2063), interpretando seus impactos e tendências ao longo do tempo.
+
+## Fontes de Financiamento da DPF
+
+-   **Títulos públicos internos** (como LTN, LFT, NTN)
+-   **Títulos externos** (em dólar ou euro)
+-   Emissão direta e operações compromissadas
+
+## Evolução Histórica da Dívida Pública Federal
+
+```{r}
+#| include: false
+#| warning: false
+#| echo: false
+# Carregar bibliotecas
+library(rbcb)
+library(ggplot2)
+library(gganimate)
+library(transformr)
+library(gifski)
+library(scales)
+library(lubridate)
+
+# Baixar os dados da dívida (código 2063)
+dados <- get_series(2063, start_date = "2000-01-01")
+colnames(dados) <- c("data", "divida")
+
+# Criar gráfico animado com estilo refinado
+ ggplot(dados, aes(x = data, y = divida)) +
+  geom_line(color = "#2C3E50", linewidth = 1.2) +
+  geom_point(color = "#E74C3C", linewidth = 2) +
+  geom_text(aes(label = scales::comma(divida, big.mark = ".", decimal.mark = ",")),
+            vjust = -1, size = 3, check_overlap = TRUE, color = "#34495E") +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
+  labs(
+    title = "Evolução da Dívida Pública Federal",
+    subtitle = "Data: {frame_along}",
+    x = "Ano",
+    y = "R$ (bilhões)",
+    caption = "Fonte: Banco Central do Brasil (Código 2063 - SGS)"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", size = 20),
+    plot.subtitle = element_text(size = 14, color = "#555"),
+    plot.caption = element_text(size = 10, hjust = 1, face = "italic"),
+    axis.text = element_text(color = "#333"),
+    axis.title = element_text(face = "bold")
+  ) +
+  transition_reveal(data)
+
+
+
+```
+
+```{r}
+#| warning: false
+#| echo: false
+#print(grafico_melhorado)
+
+# Criar gráfico animado com estilo refinado
+ ggplot(dados, aes(x = data, y = divida)) +
+  geom_line(color = "#2C3E50", linewidth = 1.2) +
+  geom_point(color = "#E74C3C", linewidth = 2) +
+  geom_text(aes(label = scales::comma(divida, big.mark = ".", decimal.mark = ",")),
+            vjust = -1, size = 3, check_overlap = TRUE, color = "#34495E") +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ".", decimal.mark = ",")) +
+  labs(
+    title = "Evolução da Dívida Pública Federal",
+    subtitle = "Data: {frame_along}",
+    x = "Ano",
+    y = "R$ (bilhões)",
+    caption = "Fonte: Banco Central do Brasil (Código 2063 - SGS)"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", size = 20),
+    plot.subtitle = element_text(size = 14, color = "#555"),
+    plot.caption = element_text(size = 10, hjust = 1, face = "italic"),
+    axis.text = element_text(color = "#333"),
+    axis.title = element_text(face = "bold")
+  ) +
+  transition_reveal(data)
+```
+
+## Análise
+
+Observa-se um crescimento contínuo da dívida pública ao longo dos anos, com destaque para os seguintes fatores:
+
+-   **Crises econômicas** (ex: 2014-2016 e 2020 - pandemia)
+-   **Aumento dos gastos públicos**
+-   **Queda de arrecadação em períodos recessivos**
+-   **Desvalorização cambial (impacta títulos em moeda estrangeira)**
+
+## Considerações Finais
+
+-   A dívida pública é necessária, mas exige **gestão fiscal responsável**.
+-   O crescimento excessivo da DPF pode levar ao aumento de juros e à desconfiança dos investidores.
+-   Transparência e planejamento são fundamentais para garantir a **sustentabilidade da dívida** no longo prazo.
+
+------------------------------------------------------------------------
+
+## Referências
+
+-   Banco Central do Brasil - [SGS](https://www.bcb.gov.br/sgspub)
+-   Tesouro Nacional - [Relatório Mensal da DPF](https://www.tesourotransparente.gov.br/)
